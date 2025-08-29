@@ -4,11 +4,17 @@
 #include "Character/AuraEnemy.h"
 #include "DrawDebugHelpers.h"
 #include "Aura/Aura.h"
+#include "AbilitySystemComponent.h"
+#include "AuraAttributeSet.h"
 
 AAuraEnemy::AAuraEnemy()
 {
     PrimaryActorTick.bCanEverTick = true;
     GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+    
+	AbilitySystemComponent = CreateDefaultSubobject< >(TEXT("AbilitySystem"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
 }
 
 void AAuraEnemy::HighlightActor()
