@@ -4,7 +4,7 @@
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -30,6 +30,12 @@ void AAuraPlayerController::BeginPlay()
     SetInputMode(InputModeData); // Set the input mode to the new data
 }
 
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
+}
 
 void AAuraPlayerController::SetupInputComponent()
 {
@@ -56,5 +62,31 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
         ControlledPawn->AddMovementInput(ForwardDirection, MovementVector.Y); // Add movement input in the forward direction
         ControlledPawn->AddMovementInput(RightDirection, MovementVector.X); // Add movement input in the right direction
+    }
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+    
+    FHitResult CursorHitResult;
+    GetHitResultUnderCursor(ECC_Visibility, false, CursorHitResult);
+    if (!CursorHitResult.bBlockingHit) return;
+
+    LastActor = ThisActor; // Mouse'ın değdiği şuan ki aktörü son aktöre eşitledik. 
+    ThisActor = CursorHitResult.GetActor(); // Mouse'ın değdiği şuan ki aktörü bu aktöre eşitledik.
+
+    if (LastActor == nullptr && ThisActor != nullptr) // Highlight this actor
+    {
+        ThisActor->HighlightActor();
+    }else if (LastActor != nullptr && ThisActor == nullptr) // Unhighlight the last actor
+    {
+        LastActor->UnHighlightActor();
+    }else if (LastActor != nullptr && ThisActor != nullptr && LastActor != ThisActor) // Unhighlight the last actor, Highlight the new actor
+    {
+        LastActor->UnHighlightActor();
+        ThisActor->HighlightActor();
+    }else if (LastActor != nullptr && ThisActor != nullptr && LastActor == ThisActor)
+    {
+        ThisActor->HighlightActor();
     }
 }
