@@ -2,15 +2,15 @@
 
 
 #include "Player/AuraPlayerState.h"
-#include "AbilitySystemComponent.h"
-#include "AuraAttributeSet.h"
-#include "AuraPlayerState.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraPlayerState::AAuraPlayerState()
 {
     AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
     AbilitySystemComponent->SetIsReplicated(true);
-    
+    AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
     AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
 
     NetUpdateFrequency = 100.0f;

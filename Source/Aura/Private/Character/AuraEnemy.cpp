@@ -4,16 +4,18 @@
 #include "Character/AuraEnemy.h"
 #include "DrawDebugHelpers.h"
 #include "Aura/Aura.h"
-#include "AbilitySystemComponent.h"
-#include "AuraAttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraEnemy::AAuraEnemy()
 {
     PrimaryActorTick.bCanEverTick = true;
     GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-    
-	AbilitySystemComponent = CreateDefaultSubobject< >(TEXT("AbilitySystem"));
+
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
 }
 
@@ -29,6 +31,14 @@ void AAuraEnemy::UnHighlightActor()
 {
     GetMesh()->SetRenderCustomDepth(false);
     WeaponMeshComponent->SetRenderCustomDepth(false);
+}
+
+
+void AAuraEnemy::BeginPlay()
+{
+    Super::BeginPlay();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    
 }
 
 void AAuraEnemy::Tick(float DeltaTime)
