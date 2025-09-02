@@ -5,7 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "AuraCharacter.h"
+#include "Player/AuraPlayerState.h"
+#include "AbilitySystemComponent.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -59,7 +60,7 @@ void AAuraCharacter::OnRep_PlayerState()
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
-    AuraPlayerState* AuraPlayerState = GetPlayerState<AuraPlayerState>();
+    AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
     check(AuraPlayerState);
     AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
     AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();

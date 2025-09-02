@@ -19,6 +19,18 @@ AAuraEnemy::AAuraEnemy()
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
 }
 
+void AAuraEnemy::BeginPlay()
+{
+    Super::BeginPlay();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    
+}
+
+void AAuraEnemy::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+}
+
 void AAuraEnemy::HighlightActor()
 {
     GetMesh()->SetRenderCustomDepth(true);
@@ -31,17 +43,4 @@ void AAuraEnemy::UnHighlightActor()
 {
     GetMesh()->SetRenderCustomDepth(false);
     WeaponMeshComponent->SetRenderCustomDepth(false);
-}
-
-
-void AAuraEnemy::BeginPlay()
-{
-    Super::BeginPlay();
-    AbilitySystemComponent->InitAbilityActorInfo(this, this);
-    
-}
-
-void AAuraEnemy::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
 }
